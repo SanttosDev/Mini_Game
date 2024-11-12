@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Gastos Compulsivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+        #quiz-container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 8px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h2>Bem-vindo ao Quiz de Gastos Compulsivos!</h2>
+        <p id="genero-texto">Escolha seu gênero para começar:</p>
+        <div class="button-group" id="genero-botoes">
+            <button onclick="iniciarQuiz('homem')">Homem</button>
+            <button onclick="iniciarQuiz('mulher')">Mulher</button>
+        </div>
+        <p id="saldo-texto" style="display: none;">Saldo: R$<span id="saldo">1000</span></p>
+        <p id="pergunta-texto" style="display: none;"></p>
+        <div class="button-group" id="resposta-botoes" style="display: none;">
+            <button onclick="gastar()">Sim</button>
+            <button onclick="proximaPergunta()">Não</button>
+        </div>
+    </div>
+
+    <script>
+        let saldo = 1000;
+        let genero = null;
+        let perguntaAtual = 0;
+
+        const perguntasHomem = [
+            { texto: "Promoção de eletrônicos! Comprar um fone por R$250?", gasto: 250 },
+            { texto: "Jaqueta de marca com 50% de desconto por R$300. Comprar?", gasto: 300 },
+            { texto: "Convite para jogo de futebol com ingressos a R$200. Aceitar?", gasto: 200 },
+            { texto: "Jantar com os amigos por R$150. Participar?", gasto: 150 },
+            { texto: "Coleção de filmes clássicos por R$180. Comprar?", gasto: 180 }
+        ];
+        const perguntasMulher = [
+            { texto: "Promoção em conjunto de maquiagem por R$180. Comprar?", gasto: 180 },
+            { texto: "Vestido de festa por R$350. Comprar?", gasto: 350 },
+            { texto: "Dia de spa com amigas por R$400. Participar?", gasto: 400 },
+            { texto: "Curso de culinária por R$150. Participar?", gasto: 150 },
+            { texto: "Kit de produtos para cabelo por R$100. Comprar?", gasto: 100 }
+        ];
+        let perguntas;
+
+        function iniciarQuiz(selecaoGenero) {
+            genero = selecaoGenero;
+            perguntas = genero === 'homem' ? perguntasHomem : perguntasMulher;
+            document.getElementById("genero-texto").style.display = 'none';
+            document.getElementById("genero-botoes").style.display = 'none';
+            document.getElementById("saldo-texto").style.display = 'block';
+            document.getElementById("pergunta-texto").style.display = 'block';
+            document.getElementById("resposta-botoes").style.display = 'flex';
+            exibirPergunta();
+        }
+
+        function exibirPergunta() {
+            if (perguntaAtual < perguntas.length) {
+                document.getElementById("pergunta-texto").textContent = perguntas[perguntaAtual].texto;
+                document.getElementById("saldo").textContent = saldo;
+            } else {
+                finalizarQuiz();
+            }
+        }
+
+        function gastar() {
+            saldo -= perguntas[perguntaAtual].gasto;
+            perguntaAtual++;
+            exibirPergunta();
+        }
+
+        function proximaPergunta() {
+            perguntaAtual++;
+            exibirPergunta();
+        }
+
+        function finalizarQuiz() {
+            document.getElementById("pergunta-texto").style.display = 'none';
+            document.getElementById("resposta-botoes").style.display = 'none';
+            let mensagem = saldo > 500 ? "Você aparenta ter um bom controle financeiro." : "Aparentemente você costuma gastar mais do que recebe.";
+            alert(mensagem);
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
